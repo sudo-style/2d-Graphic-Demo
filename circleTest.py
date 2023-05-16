@@ -5,7 +5,7 @@ from Circle import Circle
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
-pygame.display.set_caption("Arc Example")
+pygame.display.set_caption("Circle Test")
 
 # background
 background = pygame. Surface(screen. get_size ())
@@ -20,7 +20,11 @@ width = 3
 # Main loop
 running = True
 t = 0
+deltaT = .0025
+WAVE_LENGTH = 400
 
+
+wave = []
 
 while running:
     # set the screen blue
@@ -30,7 +34,7 @@ while running:
     stop_angle_degrees = 350 + t
     start_angle_radians = math.radians(start_angle_degrees)
     stop_angle_radians = math.radians(stop_angle_degrees)
-    t+=.01
+    t+= deltaT
 
     c = Circle(150,150,50)
     x,y = c.getXYCenterToRadius(start_angle_degrees)
@@ -42,12 +46,22 @@ while running:
     # does the same, need to figure out how to make this recursive 
     c3 = Circle(x1,y1,25/2)    
     x2,y2 = c3.getXYCenterToRadius(start_angle_degrees+t*4)
-    print(x,y)
 
-    # draw the rotations of each orbits
+    wave = [y2] + wave
+    #print(x,y)
+
+    # updates the display
+    #pygame.draw.circle(screen, color, (150,150), width)
+    # first circle
     pygame.draw.line(screen, color, (x,y), (c.centerX, c.centerY))
     pygame.draw.line(screen, color, (x,y), (x1, y1))
     pygame.draw.line(screen, color, (x1,y1), (x2, y2))
+
+
+    # draw all points in the wave
+    for i in range(len(wave)):
+        point = wave[i]
+        pygame.draw.circle(screen, color, (200 + i,point), 1)
 
     # draw the screen
     pygame.display.flip()
@@ -56,4 +70,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    if len(wave) > WAVE_LENGTH:
+        wave.pop()
 pygame.quit()
