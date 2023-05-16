@@ -2,6 +2,7 @@
 
 ## What I have learned
 Things are drawn to the screen layer by layer.
+The clock makes the game run at a constant rate.
 
 ## Math I have larned
 to get the x,y cordinate use (r * cos(theta) + circleCenterX, r * sin(theta) + circleCenterY)
