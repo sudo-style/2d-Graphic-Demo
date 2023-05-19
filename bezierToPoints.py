@@ -4,21 +4,29 @@ def main():
     x =  bezierToPoints('Andy.svg')
     print(len(x))
 
-def bezierToPoints(filePath):
-    # Convert SVG file to paths
+'''
+load the SVG file and extract the paths
+note extra paths will be added but,
+line connects the end of one path to the start of the next
+
+NOTE: While I did take this code from Chat GPT,
+I modified it so that it will output all of the curves
+Increase the quality by increaseing the interpolation points
+and translating the image so that it fits on the canvas
+'''
+def bezierToPoints(filePath, quality=1, translate = (400,300)):
     output = []
     paths, _ = svg2paths(filePath)
-
-    path = paths[0]
-    samples = len(path)
-    # Extract coordinates from paths
-    for i in range(samples):
-        t = i / (samples + 1) 
-        point = path.point(t) 
-        x = int(point.real)
-        y = int(point.imag)
-        output.append((x,y))
+    # paths are the bezier curves
+    for path in paths:
+        # this interpolates baised on the quality parameter
+        samples = quality * len(path) 
+        for i in range(samples):
+            t = i / (samples + 1) 
+            point = path.point(t) 
+            x = int(point.real- translate[0])
+            y = int(point.imag - translate[1])
+            output.append((x,y))
     return output
-
 if __name__ == "__main__":
     main()
