@@ -22,6 +22,7 @@ FPS = 60
 white = (255, 255, 255)
 black = (0, 0, 30)
 red = (255,0,0)
+green = (0,255,0)
 
 #time = 0
 # Fourier Transform function
@@ -81,7 +82,15 @@ def main():
     translate = (300,300) # this shifts the epicycles,
     
     # converts svg files curves to x,y cordinates, with a quality paramater
-    drawing = bezierToPoints('Andy.svg',3)
+    file_path = input("Choose a file: ")
+
+    try:
+        drawing = bezierToPoints(file_path,3)
+    except:
+        print("eh, that's ok but this will work")
+        file_path = 'Andy.svg'
+        drawing = bezierToPoints(file_path,3)
+
 
     # extract x and y values from the drawing
     skip = 1  # if a sketch has too many points, you can skip some
@@ -103,7 +112,7 @@ def main():
         epicycles1 = epicycles(width/2, translate[1], fourierX, 0, time)
 
         # rotated by 180 degrees so it can do y axis movements
-        epicycles2 = epicycles(translate[0], height/2, fourierY, math.pi/2, time) 
+        epicycles2 = epicycles(epicycles1.x, epicycles1.y, fourierY, math.pi/2, time) 
         intercection = pygame.Vector2(epicycles1.x, epicycles2.y)
 
         # stops appending after when finished the drawing
